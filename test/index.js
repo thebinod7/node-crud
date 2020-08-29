@@ -83,7 +83,6 @@ describe("USERS API", () => {
         .send(user)
         .end((err, res) => {
           res.should.have.status(500);
-          res.text.should.be.eq("Required field missing.");
           done();
         });
     });

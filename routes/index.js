@@ -23,8 +23,7 @@ router.post("/signup", (req, res) => {
       res.status(200).send(d);
     })
     .catch((e) => {
-      console.log("err:", e);
-      res.status(500).send("Required field missing.");
+      res.status(500).send(e);
     });
 });
 
@@ -34,7 +33,7 @@ router.get("/users", (req, res) => {
       res.json(d);
     })
     .catch((e) => {
-      console.log("ERR:", e);
+      res.status(500).send("Server error.");
     });
 });
 
@@ -45,7 +44,7 @@ router.get("/users/:id", (req, res) => {
       res.json(d);
     })
     .catch((e) => {
-      console.log("ERR:", e);
+      res.status(500).send("Server error.");
     });
 });
 
@@ -53,10 +52,11 @@ router.put("/users/:id", (req, res) => {
   const payload = req.body;
   UserController.updateUser(req.params.id, payload)
     .then((d) => {
-      res.json(d);
+      if (!d) return res.status(500).send("Could not update user.");
+      res.status(200).send(d);
     })
     .catch((e) => {
-      console.log("ERR:", e);
+      res.status(500).send("Server error.");
     });
 });
 
@@ -68,7 +68,7 @@ router.delete("/users/:id", (req, res) => {
       res.status(200).send(d);
     })
     .catch((e) => {
-      console.log("ERR:", e);
+      res.status(500).send("Server error.");
     });
 });
 
