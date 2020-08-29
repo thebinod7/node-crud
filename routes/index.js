@@ -20,10 +20,11 @@ router.post("/signup", (req, res) => {
   let payload = req.body;
   UserController.signupUser(payload)
     .then((d) => {
-      res.json(d);
+      res.status(200).send(d);
     })
     .catch((e) => {
-      console.log("ERR:", e);
+      console.log("err:", e);
+      res.status(500).send("Required field missing.");
     });
 });
 
@@ -40,6 +41,7 @@ router.get("/users", (req, res) => {
 router.get("/users/:id", (req, res) => {
   UserController.getById(req.params.id)
     .then((d) => {
+      if (!d) return res.status(404).send("User does not exist.");
       res.json(d);
     })
     .catch((e) => {
@@ -61,7 +63,9 @@ router.put("/users/:id", (req, res) => {
 router.delete("/users/:id", (req, res) => {
   UserController.deleteUser(req.params.id)
     .then((d) => {
-      res.json(d);
+      if (d.deletedCount < 1)
+        return res.status(404).send("User does not exist.");
+      res.status(200).send(d);
     })
     .catch((e) => {
       console.log("ERR:", e);

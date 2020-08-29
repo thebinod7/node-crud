@@ -31,3 +31,5 @@ app.use("/", RouteManager);
 app.listen(4000, function (req, res) {
   console.log("server started at: 4000");
 });
+
+module.exports = app;
