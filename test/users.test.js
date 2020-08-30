@@ -1,15 +1,19 @@
-var assert = require("assert");
-let chai = require("chai");
-let chaiHttp = require("chai-http");
-let server = require("../app");
-chai.should();
+// const assert = require("assert");
+const chai = require("chai");
+const chaiHttp = require("chai-http");
+const server = require("../app");
 
+chai.should();
 chai.use(chaiHttp);
 
-describe("USERS API", () => {
-  // ======LIST ALL USERS======
+describe("USERS API TEST CASE:", () => {
+  before((done) => {
+    console.log("========Start of test cases=============");
+    done();
+  });
+
   describe("GET /users", () => {
-    it("It should return all the users", (done) => {
+    it("It should list all the users", (done) => {
       chai
         .request(server)
         .get("/users")
@@ -21,7 +25,6 @@ describe("USERS API", () => {
     });
   });
 
-  //   ===========GET ONE USER=========
   describe("GET users/:id.", () => {
     it("It should get a user by ID.", (done) => {
       let userId = "5f2a7eee66eb6d3dc2bbe10e";
@@ -52,10 +55,10 @@ describe("USERS API", () => {
   });
 
   describe("POST /users", () => {
-    it("It should create new user", (done) => {
+    it("It should create a new user", (done) => {
       const user = {
-        name: "Johny Sins",
-        email: "johny@mailinator.com",
+        name: "John Wick",
+        email: "john@mailinator.com",
         password: "PassTheWord",
       };
       chai
@@ -67,7 +70,7 @@ describe("USERS API", () => {
           res.body.should.have.property("_id");
           res.body.should.have.property("email");
           res.body.should.be.a("object");
-          res.body.should.have.property("email").eq("johny@mailinator.com");
+          res.body.should.have.property("email").eq("john@mailinator.com");
           done();
         });
     });
@@ -134,5 +137,8 @@ describe("USERS API", () => {
     });
   });
 
-  //   =========End of Tests=========
+  after((done) => {
+    console.log("========End of test cases=============");
+    done();
+  });
 });
