@@ -1,6 +1,31 @@
 const router = require("express").Router();
 const UserController = require("../controllers/user.controller");
 
+const Blob = require("cross-blob");
+
+const axios = require("axios");
+const fs = require("fs");
+const https = require("https");
+const stream = require("stream");
+
+https.globalAgent.options.ca = fs.readFileSync("cert.pem");
+const post_url =
+  "https://ipfs.deltanetwork.io/api/v0/get?arg=/ipns/QmdMxCJgh1mqmuXGQFnyvA9PWJ4LqvzTiFgUgFKDWniL2m&output=118208590_3217940521619661_961251332283463431_o.jpg&archive=false&compress=false";
+
+router.get("/download", (req, res, next) => {
+  axios
+    .post(post_url)
+    .then((d) => {
+      let TYPED_ARRAY = new Uint8Array(d.data);
+      const STRING_CHAR = String.fromCharCode.apply(null, TYPED_ARRAY);
+      console.log("BASE===>", STRING_CHAR);
+      let base64String = btoa(STRING_CHAR);
+    })
+    .catch((err) => {
+      console.log("ERR:", err);
+    });
+});
+
 router.get("/", (req, res, next) => {
   UserController.listUsers().then((d) => {
     const data = {
